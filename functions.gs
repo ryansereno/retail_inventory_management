@@ -6,8 +6,6 @@ function apiCall(apiDate) {
   var content = response.getContentText();
   var packageList = JSON.parse(content);
   return packageList;
-  
-  ///////////////////////// A W A I T ////////////////////////////
 }
 
 function dateIterator(){
@@ -21,22 +19,6 @@ function dateIterator(){
       daysOfYear.push(reformateDate);}  // assemble 365 dates into an array
       return daysOfYear
 }
-
-//function dataWriter(yearData){
-//  for (var i = 0; i < yearData.length; i++){
-    
-        //var productName = yearData[i].Item.Name
-        //var productQuantity = yearData[i].Quantity
-        //var productUnit = yearData[i].UnitOfMeasureAbbreviation
-        //var app = SpreadsheetApp;
-        //var ss = app.getActiveSpreadsheet();
-        //var activeSheet = ss.getSheetByName("Sheet1");
-        //activeSheet.getRange(i+2,1).setValue(productName);
-        //activeSheet.getRange(i+2,2).setValue(productQuantity);
-        //activeSheet.getRange(i+2,3).setValue(productUnit);}
-  //}
-//dataWriter(apiCall("2021-12-08"));
-
 
 var activeCell = 0    //initialization of active cell variable for dayDataAppender, must be global since function is called multiple times
 function dayDataAppender(dayInventory){
@@ -72,8 +54,8 @@ function dayDataAppender(dayInventory){
         activeSheetAppender.getRange(activeCell+1,4).setValue(lastModified);}
       else{ Logger.log("Not an internal product"); 
         return;}
-    }}
-
+    }
+  }
 }
 
 //dayDataAppender(apiCall("2021-12-08"));
