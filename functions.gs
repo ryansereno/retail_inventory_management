@@ -6,7 +6,7 @@ function apiCall(apiDate) {
   var content = response.getContentText();
   var packageList = JSON.parse(content);
   return packageList;
-  var thisis = 1
+  
   ///////////////////////// A W A I T ////////////////////////////
 }
 
@@ -45,32 +45,33 @@ function dayDataAppender(dayInventory){
   var activeSheetAppender = ss.getSheetByName("Dutton");
   try{
     if (dataFilter(dayInventory.Item.Name) == true){
-    var productName = dayInventory.Item.Name
-    var productQuantity = dayInventory.Quantity
-    var productUnit = dayInventory.UnitOfMeasureAbbreviation
-    var lastModified = dayInventory.LastModified;
-    activeCell += 1
-    activeSheetAppender.getRange(activeCell+1,1).setValue(productName);
-    activeSheetAppender.getRange(activeCell+1,2).setValue(productQuantity);
-    activeSheetAppender.getRange(activeCell+1,3).setValue(productUnit);
-    activeSheetAppender.getRange(activeCell+1,4).setValue(lastModified);}
+      var productName = dayInventory.Item.Name
+      var productQuantity = dayInventory.Quantity
+      var productUnit = dayInventory.UnitOfMeasureAbbreviation
+      var lastModified = dayInventory.LastModified;
+      activeCell += 1
+      activeSheetAppender.getRange(activeCell+1,1).setValue(productName);
+      activeSheetAppender.getRange(activeCell+1,2).setValue(productQuantity);
+      activeSheetAppender.getRange(activeCell+1,3).setValue(productUnit);
+      activeSheetAppender.getRange(activeCell+1,4).setValue(lastModified);}
+    else{ Logger.log("Not an internal product");
+      return;}
   }
   
   catch(err){ 
     for (var i = 0; i < dayInventory.length; i++){
       if (dataFilter(dayInventory[i].Item.Name) == true){
-    var productName = dayInventory[i].Item.Name
-    var productQuantity = dayInventory[i].Quantity
-    var productUnit = dayInventory[i].UnitOfMeasureAbbreviation
-    var lastModified = dayInventory[i].LastModified;
-    activeCell += 1
-    activeSheet.getRange(activeCell+1,1).setValue(productName);
-    activeSheet.getRange(activeCell+1,2).setValue(productQuantity);
-    activeSheet.getRange(activeCell+1,3).setValue(productUnit);
-    activeSheet.getRange(activeCell+1,4).setValue(lastModified);}
-    else{
-      return;
-    }
+        var productName = dayInventory[i].Item.Name
+        var productQuantity = dayInventory[i].Quantity
+        var productUnit = dayInventory[i].UnitOfMeasureAbbreviation
+        var lastModified = dayInventory[i].LastModified;
+        activeCell += 1
+        activeSheetAppender.getRange(activeCell+1,1).setValue(productName);
+        activeSheetAppender.getRange(activeCell+1,2).setValue(productQuantity);
+        activeSheetAppender.getRange(activeCell+1,3).setValue(productUnit);
+        activeSheetAppender.getRange(activeCell+1,4).setValue(lastModified);}
+      else{ Logger.log("Not an internal product"); 
+        return;}
     }}
 
 }
@@ -78,10 +79,8 @@ function dayDataAppender(dayInventory){
 //dayDataAppender(apiCall("2021-12-08"));
 
 
-
-
 function yearDataCompiler(){
-  for (let i = 720; i <= 730; i++) {
+  for (let i = 725; i <= 730; i++) {
     var dayInventory = apiCall(dateIterator()[i]);
     Logger.log(dateIterator()[i])
     Logger.log(dayInventory);
@@ -99,13 +98,13 @@ function dataFilter(APIreturn){
   for (i = 1; i < 1500; i++){
     if (activeSheetFilter.getRange(i+1,1).getValue().length <= 1){
       break;}
-    else{activeCellRead = activeSheetFilter.getRange(i+1,1).getValue()};
+    else{activeCellRead = activeSheetFilter.getRange(i+1,1).getValue();
+    Logger.log(activeCellRead)
     if (APIreturn == activeCellRead){
       return true;
     }
     else{
-      return false;
+      return false;}
     }
-    Logger.log(activeCellRead)
   }
 }
