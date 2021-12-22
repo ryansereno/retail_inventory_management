@@ -21,7 +21,7 @@ function apiCall(apiDate) {
 }
 
 function yearDataCompiler(){
-  for (let i = 725; i <= 730; i++) {
+  for (let i = 300; i <= 310; i++) {
     var dayInventory = apiCall(dateIterator()[i]);
     Logger.log(dateIterator()[i])
     Logger.log(dayInventory);
@@ -38,7 +38,7 @@ function dayDataAppender(dayInventory){
   var ss = app.getActiveSpreadsheet();
   var activeSheetAppender = ss.getSheetByName("Dutton");
   try{
-    if (dataFilter(dayInventory.Item.Name) == true){
+    if (dataFilter(dayInventory.Item.Name)[0] == true){
       var productName = dayInventory.Item.Name
       var productQuantity = dayInventory.Quantity
       var productUnit = dayInventory.UnitOfMeasureAbbreviation
@@ -48,13 +48,12 @@ function dayDataAppender(dayInventory){
       activeSheetAppender.getRange(activeCell+1,2).setValue(productQuantity);
       activeSheetAppender.getRange(activeCell+1,3).setValue(productUnit);
       activeSheetAppender.getRange(activeCell+1,4).setValue(lastModified);}
-    else{ Logger.log("Not an internal product");
-      return;}
+    
   }
   
   catch(err){ 
     for (var i = 0; i < dayInventory.length; i++){
-      if (dataFilter(dayInventory[i].Item.Name) == true){
+      if (dataFilter(dayInventory[i].Item.Name)[0] == true){
         var productName = dayInventory[i].Item.Name
         var productQuantity = dayInventory[i].Quantity
         var productUnit = dayInventory[i].UnitOfMeasureAbbreviation
@@ -64,8 +63,6 @@ function dayDataAppender(dayInventory){
         activeSheetAppender.getRange(activeCell+1,2).setValue(productQuantity);
         activeSheetAppender.getRange(activeCell+1,3).setValue(productUnit);
         activeSheetAppender.getRange(activeCell+1,4).setValue(lastModified);}
-      else{ Logger.log("Not an internal product"); 
-        return;}
     }
   }
 }
@@ -75,20 +72,23 @@ function dayDataAppender(dayInventory){
 
 
 
-function dataFilter(APIreturn){
+function dataFilter(itemName){
   var app = SpreadsheetApp;
   var ss = app.getActiveSpreadsheet();
   var activeSheetFilter = ss.getSheetByName("All Store Total");
   for (i = 1; i < 1500; i++){
     if (activeSheetFilter.getRange(i+1,1).getValue().length <= 1){
       break;}
-    else{activeCellRead = activeSheetFilter.getRange(i+1,1).getValue();
+    else{let activeCellRead = activeSheetFilter.getRange(i+1,1).getValue();
       Logger.log(activeCellRead)
-      if (APIreturn == activeCellRead){
-        return true;
+      if (itemName == activeCellRead){
+        return [true, (i+1,2)];
+        //var app2 = SpreadsheetApp;
+        //var ss2 = app2.getActiveSpreadsheet();
+        //var activeSheetAppender = ss2.getSheetByName("Dutton");
+        //activeSheetAppender.getRange(activeCell+2,1).setValue(itemName)
       }
-      else{
-        return false;}
     }
   }
 }
+//dataFilter("MG Cartridge 1/2g Durban")
