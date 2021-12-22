@@ -1,3 +1,15 @@
+function dateIterator(){
+  var currentDate = new Date();
+  var lastYear = new Date();
+  var daysOfYear = [];
+  var start = new Date(lastYear.setFullYear(currentDate.getFullYear() -2)); //get date 2 years ago
+  for (i = start; i <= currentDate; i.setDate(i.getDate() + 1)) { // iterate through dates of past 2 years
+      var interatorDate = new Date(i);
+      var reformateDate = interatorDate.getFullYear() + "-" + (interatorDate.getMonth() + 1) + "-" + interatorDate.getDate()  // reformat date to YYYY-MM-DD for api url
+      daysOfYear.push(reformateDate);}  // assemble 730 dates into an array
+      return daysOfYear
+}
+
 function apiCall(apiDate) {
   var headers = {"Authorization" : "Basic " + Utilities.base64Encode("ByDuekpGQ8Uyy73vo1en1QslAvJXqMWCe53VVdyBKXedSuxa" + ':' + "uaQp1cnS3PMSYV6e4ZzXn1ENkE5GzdPdEsuJSpMhkk4clt-c")};
   var params = {"method":"GET","headers":headers};
@@ -8,17 +20,17 @@ function apiCall(apiDate) {
   return packageList;
 }
 
-function dateIterator(){
-  var currentDate = new Date();
-  var lastYear = new Date();
-  var daysOfYear = [];
-  var start = new Date(lastYear.setFullYear(currentDate.getFullYear() -2)); //get last year date
-  for (i = start; i <= currentDate; i.setDate(i.getDate() + 1)) { // iterate through dates of past year
-      var interatorDate = new Date(i);
-      var reformateDate = interatorDate.getFullYear() + "-" + (interatorDate.getMonth() + 1) + "-" + interatorDate.getDate()  // reformat date to YYYY-MM-DD for api url
-      daysOfYear.push(reformateDate);}  // assemble 365 dates into an array
-      return daysOfYear
+function yearDataCompiler(){
+  for (let i = 725; i <= 730; i++) {
+    var dayInventory = apiCall(dateIterator()[i]);
+    Logger.log(dateIterator()[i])
+    Logger.log(dayInventory);
+    dayDataAppender(dayInventory)
+    Utilities.sleep(500)
+    Logger.log("Call number " + i)
+  }
 }
+//yearDataCompiler()
 
 var activeCell = 0    //initialization of active cell variable for dayDataAppender, must be global since function is called multiple times
 function dayDataAppender(dayInventory){
@@ -61,17 +73,7 @@ function dayDataAppender(dayInventory){
 //dayDataAppender(apiCall("2021-12-08"));
 
 
-function yearDataCompiler(){
-  for (let i = 725; i <= 730; i++) {
-    var dayInventory = apiCall(dateIterator()[i]);
-    Logger.log(dateIterator()[i])
-    Logger.log(dayInventory);
-    dayDataAppender(dayInventory)
-    Utilities.sleep(500)
-    Logger.log("Call number " + i)
-  }
-}
-//yearDataCompiler()
+
 
 function dataFilter(APIreturn){
   var app = SpreadsheetApp;
@@ -81,12 +83,12 @@ function dataFilter(APIreturn){
     if (activeSheetFilter.getRange(i+1,1).getValue().length <= 1){
       break;}
     else{activeCellRead = activeSheetFilter.getRange(i+1,1).getValue();
-    Logger.log(activeCellRead)
-    if (APIreturn == activeCellRead){
-      return true;
-    }
-    else{
-      return false;}
+      Logger.log(activeCellRead)
+      if (APIreturn == activeCellRead){
+        return true;
+      }
+      else{
+        return false;}
     }
   }
 }
