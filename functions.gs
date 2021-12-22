@@ -21,7 +21,11 @@ function apiCall(apiDate) {
 }
 
 function yearDataCompiler(){
-  for (let i = 300; i <= 310; i++) {
+  var app = SpreadsheetApp;
+  var ss = app.getActiveSpreadsheet();
+  var activeSheetAppender = ss.getSheetByName("Dutton");
+  activeSheetAppender.getRange("B2:B").setValue(0)
+  for (let i = 700; i <= 720; i++) {
     var dayInventory = apiCall(dateIterator()[i]);
     Logger.log(dateIterator()[i])
     Logger.log(dayInventory);
@@ -32,37 +36,39 @@ function yearDataCompiler(){
 }
 //yearDataCompiler()
 
-var activeCell = 0    //initialization of active cell variable for dayDataAppender, must be global since function is called multiple times
+var activeCell    //initialization of active cell variable for dayDataAppender, must be global since function is called multiple times
 function dayDataAppender(dayInventory){
   var app = SpreadsheetApp;
   var ss = app.getActiveSpreadsheet();
   var activeSheetAppender = ss.getSheetByName("Dutton");
   try{
-    if (dataFilter(dayInventory.Item.Name)[0] == true){
+    if (dataFilter(dayInventory.Item.Name) == true){
       var productName = dayInventory.Item.Name
       var productQuantity = dayInventory.Quantity
       var productUnit = dayInventory.UnitOfMeasureAbbreviation
       var lastModified = dayInventory.LastModified;
-      activeCell += 1
-      activeSheetAppender.getRange(activeCell+1,1).setValue(productName);
-      activeSheetAppender.getRange(activeCell+1,2).setValue(productQuantity);
-      activeSheetAppender.getRange(activeCell+1,3).setValue(productUnit);
-      activeSheetAppender.getRange(activeCell+1,4).setValue(lastModified);}
+      //activeCell += 1
+      //activeSheetAppender.getRange(activeCell+1,1).setValue(productName);
+      activeSheetAppender.getRange(activeCell,2).setValue(activeSheetAppender.getRange(activeCell,2).getValue() + productQuantity);
+      //activeSheetAppender.getRange(activeCell+1,3).setValue(productUnit);
+      //activeSheetAppender.getRange(activeCell+1,4).setValue(lastModified);
+      }
     
   }
   
   catch(err){ 
     for (var i = 0; i < dayInventory.length; i++){
-      if (dataFilter(dayInventory[i].Item.Name)[0] == true){
+      if (dataFilter(dayInventory[i].Item.Name) == true){
         var productName = dayInventory[i].Item.Name
         var productQuantity = dayInventory[i].Quantity
         var productUnit = dayInventory[i].UnitOfMeasureAbbreviation
         var lastModified = dayInventory[i].LastModified;
-        activeCell += 1
-        activeSheetAppender.getRange(activeCell+1,1).setValue(productName);
-        activeSheetAppender.getRange(activeCell+1,2).setValue(productQuantity);
-        activeSheetAppender.getRange(activeCell+1,3).setValue(productUnit);
-        activeSheetAppender.getRange(activeCell+1,4).setValue(lastModified);}
+        //activeCell += 1
+        //activeSheetAppender.getRange(activeCell+1,1).setValue(productName);
+        activeSheetAppender.getRange(activeCell,2).setValue(activeSheetAppender.getRange(activeCell,2).getValue() + productQuantity);
+        //activeSheetAppender.getRange(activeCell+1,3).setValue(productUnit);
+        //activeSheetAppender.getRange(activeCell+1,4).setValue(lastModified);
+        }
     }
   }
 }
@@ -79,10 +85,11 @@ function dataFilter(itemName){
   for (i = 1; i < 1500; i++){
     if (activeSheetFilter.getRange(i+1,1).getValue().length <= 1){
       break;}
-    else{let activeCellRead = activeSheetFilter.getRange(i+1,1).getValue();
+    else{activeCellRead = activeSheetFilter.getRange(i+1,1).getValue();
       Logger.log(activeCellRead)
       if (itemName == activeCellRead){
-        return [true, (i+1,2)];
+        activeCell = i+1
+        return true;
         //var app2 = SpreadsheetApp;
         //var ss2 = app2.getActiveSpreadsheet();
         //var activeSheetAppender = ss2.getSheetByName("Dutton");
