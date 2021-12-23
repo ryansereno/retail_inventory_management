@@ -36,10 +36,10 @@ function yearDataCompiler(storeName, licenseNumber){
     Logger.log("Call number " + i)
   }
 }
-yearDataCompiler("Dutton", "C10-0000456-LIC")
-//yearDataCompiler("Haight", "")
+//yearDataCompiler("Dutton", "C10-0000456-LIC")
+yearDataCompiler("Haight", "C10-0000453-LIC")
 //yearDataCompiler("Polk", "")
-//yearDataCompiler("Sebastopol", "")
+yearDataCompiler("Sebastopol", "C10-0000455-LIC")
 
 var activeCell    //initialization of active cell variable for dayDataAppender, must be global since function is called multiple times
 function dayDataAppender(dayInventory, itemNamesArray, storeName){
