@@ -17,6 +17,7 @@ function apiCall(apiDate) {
   var response = UrlFetchApp.fetch(url, params);
   var content = response.getContentText();
   var packageList = JSON.parse(content);
+  Logger.log(url)
   return packageList;
 }
 
@@ -25,10 +26,10 @@ function yearDataCompiler(){
   var ss = app.getActiveSpreadsheet();
   var activeSheetAppender = ss.getSheetByName("Dutton");
   activeSheetAppender.getRange("B2:B").setValue(0)
-  for (let i = 700; i <= 720; i++) {
+  for (let i = 200; i <= 731; i++) {
     var dayInventory = apiCall(dateIterator()[i]);
-    Logger.log(dateIterator()[i])
-    Logger.log(dayInventory);
+    //Logger.log(dateIterator()[i])
+    //Logger.log(dayInventory);
     dayDataAppender(dayInventory)
     Utilities.sleep(500)
     Logger.log("Call number " + i)
@@ -86,7 +87,7 @@ function dataFilter(itemName){
     if (activeSheetFilter.getRange(i+1,1).getValue().length <= 1){
       break;}
     else{activeCellRead = activeSheetFilter.getRange(i+1,1).getValue();
-      Logger.log(activeCellRead)
+      //Logger.log(activeCellRead)
       if (itemName == activeCellRead){
         activeCell = i+1
         return true;
