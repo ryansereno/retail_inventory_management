@@ -27,7 +27,7 @@ function yearDataCompiler(storeName, licenseNumber){
   var activeSheetAppender = ss.getSheetByName(storeName);
   activeSheetAppender.getRange("B2:B").setValue(0)
   var itemNamesArray = itemNameArrayCompiler()
-  for (let i = 730; i <= 731; i++) {
+  for (let i = 1; i <= 731; i++) {
     var dayInventory = apiCall(dateIterator()[i], licenseNumber);
     //Logger.log(dateIterator()[i])
     //Logger.log(dayInventory);
@@ -36,10 +36,14 @@ function yearDataCompiler(storeName, licenseNumber){
     Logger.log("Call number " + i)
   }
 }
-//yearDataCompiler("Dutton", "C10-0000456-LIC")
-yearDataCompiler("Haight", "C10-0000453-LIC")
+function compileSheet(){
+  yearDataCompiler("Dutton", "C10-0000456-LIC")
+  yearDataCompiler("Haight", "C10-0000453-LIC")
+  yearDataCompiler("Sebastopol", "C10-0000455-LIC")
+//yearDataCompiler("Sonoma", "")
 //yearDataCompiler("Polk", "")
-yearDataCompiler("Sebastopol", "C10-0000455-LIC")
+}
+
 
 var activeCell    //initialization of active cell variable for dayDataAppender, must be global since function is called multiple times
 function dayDataAppender(dayInventory, itemNamesArray, storeName){
@@ -73,7 +77,7 @@ function dayDataAppender(dayInventory, itemNamesArray, storeName){
         activeSheetAppender.getRange(activeCell,2).setValue(activeSheetAppender.getRange(activeCell,2).getValue() + productQuantity);
         //activeSheetAppender.getRange(activeCell+1,3).setValue(productUnit);
         //activeSheetAppender.getRange(activeCell+1,4).setValue(lastModified);
-        }
+      }
     }
   }
 }
