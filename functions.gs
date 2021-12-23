@@ -10,10 +10,10 @@ function dateIterator(){
       return daysOfYear
 }
 
-function apiCall(apiDate) {
+function apiCall(apiDate, licenseNumber) {
   var headers = {"Authorization" : "Basic " + Utilities.base64Encode("ByDuekpGQ8Uyy73vo1en1QslAvJXqMWCe53VVdyBKXedSuxa" + ':' + "uaQp1cnS3PMSYV6e4ZzXn1ENkE5GzdPdEsuJSpMhkk4clt-c")};
   var params = {"method":"GET","headers":headers};
-  var url = "https://api-ca.metrc.com/packages/v1/active?licenseNumber=C10-0000456-LIC&lastModifiedStart=" + apiDate + "T00:01:00Z&lastModifiedEnd=" + apiDate + "T23:59:00Z"
+  var url = "https://api-ca.metrc.com/packages/v1/active?licenseNumber=" + licenseNumber + "&lastModifiedStart=" + apiDate + "T00:01:00Z&lastModifiedEnd=" + apiDate + "T23:59:00Z"
   var response = UrlFetchApp.fetch(url, params);
   var content = response.getContentText();
   var packageList = JSON.parse(content);
@@ -21,29 +21,33 @@ function apiCall(apiDate) {
   return packageList;
 }
 
-function yearDataCompiler(){
+function yearDataCompiler(storeName, licenseNumber){
   var app = SpreadsheetApp;
   var ss = app.getActiveSpreadsheet();
-  var activeSheetAppender = ss.getSheetByName("Dutton");
+  var activeSheetAppender = ss.getSheetByName(storeName);
   activeSheetAppender.getRange("B2:B").setValue(0)
-  for (let i = 200; i <= 731; i++) {
-    var dayInventory = apiCall(dateIterator()[i]);
+  var itemNamesArray = itemNameArrayCompiler()
+  for (let i = 730; i <= 731; i++) {
+    var dayInventory = apiCall(dateIterator()[i], licenseNumber);
     //Logger.log(dateIterator()[i])
     //Logger.log(dayInventory);
-    dayDataAppender(dayInventory)
+    dayDataAppender(dayInventory, itemNamesArray, storeName)
     Utilities.sleep(500)
     Logger.log("Call number " + i)
   }
 }
-//yearDataCompiler()
+yearDataCompiler("Dutton", "C10-0000456-LIC")
+//yearDataCompiler("Haight", "")
+//yearDataCompiler("Polk", "")
+//yearDataCompiler("Sebastopol", "")
 
 var activeCell    //initialization of active cell variable for dayDataAppender, must be global since function is called multiple times
-function dayDataAppender(dayInventory){
+function dayDataAppender(dayInventory, itemNamesArray, storeName){
   var app = SpreadsheetApp;
   var ss = app.getActiveSpreadsheet();
-  var activeSheetAppender = ss.getSheetByName("Dutton");
+  var activeSheetAppender = ss.getSheetByName(storeName);
   try{
-    if (dataFilter(dayInventory.Item.Name) == true){
+    if (dataFilter(itemNamesArray, dayInventory.Item.Name) == true){
       var productName = dayInventory.Item.Name
       var productQuantity = dayInventory.Quantity
       var productUnit = dayInventory.UnitOfMeasureAbbreviation
@@ -59,7 +63,7 @@ function dayDataAppender(dayInventory){
   
   catch(err){ 
     for (var i = 0; i < dayInventory.length; i++){
-      if (dataFilter(dayInventory[i].Item.Name) == true){
+      if (dataFilter(itemNamesArray, dayInventory[i].Item.Name) == true){
         var productName = dayInventory[i].Item.Name
         var productQuantity = dayInventory[i].Quantity
         var productUnit = dayInventory[i].UnitOfMeasureAbbreviation
@@ -77,19 +81,34 @@ function dayDataAppender(dayInventory){
 //dayDataAppender(apiCall("2021-12-08"));
 
 
-
-
-function dataFilter(itemName){
+function itemNameArrayCompiler(){
   var app = SpreadsheetApp;
   var ss = app.getActiveSpreadsheet();
   var activeSheetFilter = ss.getSheetByName("All Store Total");
+  var itemNames = []
   for (i = 1; i < 1500; i++){
-    if (activeSheetFilter.getRange(i+1,1).getValue().length <= 1){
-      break;}
-    else{activeCellRead = activeSheetFilter.getRange(i+1,1).getValue();
+      if (activeSheetFilter.getRange(i+1,1).getValue().length <= 1){
+        break;}
+      else{activeCellRead = activeSheetFilter.getRange(i+1,1).getValue();
+        itemNames.push(activeCellRead);}
+  }
+  Logger.log("item list compiled")
+  return itemNames;
+}
+
+function dataFilter(itemNames, itemNameFromAPI){
+  //var app = SpreadsheetApp;
+  //var ss = app.getActiveSpreadsheet();
+  //var activeSheetFilter = ss.getSheetByName("All Store Total");
+  for (i = 0; i <= itemNames.length; i++){
+    //if (activeSheetFilter.getRange(i+1,1).getValue().length <= 1){
+      //break;}
+    //if{activeCellRead = activeSheetFilter.getRange(i+1,1).getValue();
       //Logger.log(activeCellRead)
-      if (itemName == activeCellRead){
-        activeCell = i+1
+      if (itemNameFromAPI == itemNames[i]){
+        activeCell = i+2                    // adds one to skip the Item header cell on sheet
+        //Logger.log(itemNames[i])
+        //Logger.log(activeCell)
         return true;
         //var app2 = SpreadsheetApp;
         //var ss2 = app2.getActiveSpreadsheet();
@@ -98,5 +117,8 @@ function dataFilter(itemName){
       }
     }
   }
-}
+
 //dataFilter("MG Cartridge 1/2g Durban")
+function doNothing(){
+  return;
+}
