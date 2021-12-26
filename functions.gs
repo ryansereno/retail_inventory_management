@@ -35,6 +35,7 @@ function yearDataCompiler(storeName, licenseNumber){
     Utilities.sleep(500)
     Logger.log("Call number " + i)
   }
+  activeSheetAppender.getRange("E1").setValue(new Date().getDate)
 }
 function compileSheet(){
   yearDataCompiler("Dutton", "C10-0000456-LIC")
