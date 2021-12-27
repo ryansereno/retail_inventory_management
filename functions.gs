@@ -35,7 +35,11 @@ function yearDataCompiler(storeName, licenseNumber){
     Utilities.sleep(500)
     Logger.log("Call number " + i)
   }
-  activeSheetAppender.getRange("E1").setValue(new Date().toISOString())
+  var today = new Date()
+  var dd = today.getDate()
+  var mm = today.getMonth() + 1
+  var yyyy = today.getFullYear()
+  activeSheetAppender.getRange("E1").setValue(mm + '/' + dd + '/' + yyyy)
 }
 function compileSheet(){
   yearDataCompiler("Dutton", "C10-0000456-LIC")
@@ -46,7 +50,11 @@ function compileSheet(){
   var app = SpreadsheetApp;
   var ss = app.getActiveSpreadsheet();
   var activeSheetAppender = ss.getSheetByName("All Store Total");
-  activeSheetAppender.getRange("E1").setValue(new Date().toISOString())
+  var today = new Date()
+  var dd = today.getDate()
+  var mm = today.getMonth() + 1
+  var yyyy = today.getFullYear()
+  activeSheetAppender.getRange("E1").setValue(mm + '/' + dd + '/' + yyyy)
 }
 
 
