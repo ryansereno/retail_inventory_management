@@ -39,8 +39,8 @@ function yearDataCompiler(storeName, licenseNumber){
 }
 function compileSheet(){
   yearDataCompiler("Dutton", "C10-0000456-LIC")
-  //yearDataCompiler("Haight", "C10-0000453-LIC")
-  //yearDataCompiler("Sebastopol", "C10-0000455-LIC")
+  yearDataCompiler("Haight", "C10-0000453-LIC")
+  yearDataCompiler("Sebastopol", "C10-0000455-LIC")
   //yearDataCompiler("Sonoma", "")
   //yearDataCompiler("Polk", "")
   var app = SpreadsheetApp;
