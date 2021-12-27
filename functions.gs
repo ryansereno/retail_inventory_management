@@ -35,14 +35,18 @@ function yearDataCompiler(storeName, licenseNumber){
     Utilities.sleep(500)
     Logger.log("Call number " + i)
   }
-  activeSheetAppender.getRange("E1").setValue(new Date().getDate)
+  activeSheetAppender.getRange("E1").setValue(new Date().toISOString())
 }
 function compileSheet(){
   yearDataCompiler("Dutton", "C10-0000456-LIC")
-  yearDataCompiler("Haight", "C10-0000453-LIC")
-  yearDataCompiler("Sebastopol", "C10-0000455-LIC")
-//yearDataCompiler("Sonoma", "")
-//yearDataCompiler("Polk", "")
+  //yearDataCompiler("Haight", "C10-0000453-LIC")
+  //yearDataCompiler("Sebastopol", "C10-0000455-LIC")
+  //yearDataCompiler("Sonoma", "")
+  //yearDataCompiler("Polk", "")
+  var app = SpreadsheetApp;
+  var ss = app.getActiveSpreadsheet();
+  var activeSheetAppender = ss.getSheetByName("All Store Total");
+  activeSheetAppender.getRange("E1").setValue(new Date().toISOString())
 }
 
 
