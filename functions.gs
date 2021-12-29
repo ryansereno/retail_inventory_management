@@ -29,8 +29,6 @@ function yearDataCompiler(storeName, licenseNumber){
   var itemNamesArray = itemNameArrayCompiler()
   for (let i = 1; i <= 731; i++) {
     var dayInventory = apiCall(dateIterator()[i], licenseNumber);
-    //Logger.log(dateIterator()[i])
-    //Logger.log(dayInventory);
     dayDataAppender(dayInventory, itemNamesArray, storeName)
     Utilities.sleep(500)
     Logger.log("Call number " + i)
@@ -45,7 +43,7 @@ function compileSheet(){
   yearDataCompiler("Dutton", "C10-0000456-LIC")
   yearDataCompiler("Haight", "C10-0000453-LIC")
   yearDataCompiler("Sebastopol", "C10-0000455-LIC")
-  //yearDataCompiler("Sonoma", "")
+  //yearDataCompiler("Sonoma", "")            add these in when license numbers are available; add view package permission to the metrc account
   //yearDataCompiler("Polk", "")
   var app = SpreadsheetApp;
   var ss = app.getActiveSpreadsheet();
@@ -69,11 +67,7 @@ function dayDataAppender(dayInventory, itemNamesArray, storeName){
       var productQuantity = dayInventory.Quantity
       var productUnit = dayInventory.UnitOfMeasureAbbreviation
       var lastModified = dayInventory.LastModified;
-      //activeCell += 1
-      //activeSheetAppender.getRange(activeCell+1,1).setValue(productName);
       activeSheetAppender.getRange(activeCell,2).setValue(activeSheetAppender.getRange(activeCell,2).getValue() + productQuantity);
-      //activeSheetAppender.getRange(activeCell+1,3).setValue(productUnit);
-      //activeSheetAppender.getRange(activeCell+1,4).setValue(lastModified);
       }
     
   }
@@ -85,18 +79,11 @@ function dayDataAppender(dayInventory, itemNamesArray, storeName){
         var productQuantity = dayInventory[i].Quantity
         var productUnit = dayInventory[i].UnitOfMeasureAbbreviation
         var lastModified = dayInventory[i].LastModified;
-        //activeCell += 1
-        //activeSheetAppender.getRange(activeCell+1,1).setValue(productName);
         activeSheetAppender.getRange(activeCell,2).setValue(activeSheetAppender.getRange(activeCell,2).getValue() + productQuantity);
-        //activeSheetAppender.getRange(activeCell+1,3).setValue(productUnit);
-        //activeSheetAppender.getRange(activeCell+1,4).setValue(lastModified);
       }
     }
   }
 }
-
-//dayDataAppender(apiCall("2021-12-08"));
-
 
 function itemNameArrayCompiler(){
   var app = SpreadsheetApp;
@@ -114,28 +101,11 @@ function itemNameArrayCompiler(){
 }
 
 function dataFilter(itemNames, itemNameFromAPI){
-  //var app = SpreadsheetApp;
-  //var ss = app.getActiveSpreadsheet();
-  //var activeSheetFilter = ss.getSheetByName("All Store Total");
   for (i = 0; i <= itemNames.length; i++){
-    //if (activeSheetFilter.getRange(i+1,1).getValue().length <= 1){
-      //break;}
-    //if{activeCellRead = activeSheetFilter.getRange(i+1,1).getValue();
-      //Logger.log(activeCellRead)
       if (itemNameFromAPI == itemNames[i]){
         activeCell = i+2                    // adds one to skip the Item header cell on sheet
-        //Logger.log(itemNames[i])
-        //Logger.log(activeCell)
         return true;
-        //var app2 = SpreadsheetApp;
-        //var ss2 = app2.getActiveSpreadsheet();
-        //var activeSheetAppender = ss2.getSheetByName("Dutton");
-        //activeSheetAppender.getRange(activeCell+2,1).setValue(itemName)
       }
     }
   }
 
-//dataFilter("MG Cartridge 1/2g Durban")
-function doNothing(){
-  return;
-}
