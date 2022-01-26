@@ -11,7 +11,7 @@ function dateIterator(){
 }
 
 function apiCall(apiDate, licenseNumber) {
-  var headers = {"Authorization" : "Basic " + Utilities.base64Encode("ByDuekpGQ8Uyy73vo1en1QslAvJXqMWCe53VVdyBKXedSuxa" + ':' + "uaQp1cnS3PMSYV6e4ZzXn1ENkE5GzdPdEsuJSpMhkk4clt-c")};
+  var headers = {"Authorization" : "Basic " + Utilities.base64Encode(keys.software + ':' + keys.user)};
   var params = {"method":"GET","headers":headers};
   var url = "https://api-ca.metrc.com/packages/v1/active?licenseNumber=" + licenseNumber + "&lastModifiedStart=" + apiDate + "T00:01:00Z&lastModifiedEnd=" + apiDate + "T23:59:00Z"
   var response = UrlFetchApp.fetch(url, params);
@@ -40,9 +40,9 @@ function yearDataCompiler(storeName, licenseNumber){
   activeSheetAppender.getRange("E1").setValue(mm + '/' + dd + '/' + yyyy)
 }
 function compileSheet(){
-  yearDataCompiler("Dutton", "C10-0000456-LIC")
-  yearDataCompiler("Haight", "C10-0000453-LIC")
-  yearDataCompiler("Sebastopol", "C10-0000455-LIC")
+  yearDataCompiler("Dutton", "C10-0000xxx-LIC")
+  yearDataCompiler("Haight", "C10-0000xxx-LIC")
+  yearDataCompiler("Sebastopol", "C10-0000xxx-LIC")
   //yearDataCompiler("Sonoma", "")            add these in when license numbers are available; add view package permission to the metrc account
   //yearDataCompiler("Polk", "")
   var app = SpreadsheetApp;
