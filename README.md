@@ -5,5 +5,5 @@
 <li>Integrates directly with each store's Metrc inventory.</li>
 <li>Works with most zebra/ZPL compatible printers</li>
 <li>Will automatically update on Monday mornings (1am) for full visibility of the week's inventory.</li>
-<p>All inventory is compiled into a Google Sheet, where users can add or remove products from the 'watch sheet'.</p>
+<li>All inventory is compiled into a Google Sheet, where users can add or remove products from the 'watch sheet'.</li>
 
